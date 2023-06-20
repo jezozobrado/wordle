@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Line from "./Line";
 
 const Tile = () => {
   const word = "stare";
 
   const [guesses, setGuesses] = useState(Array(5).fill(""));
+
+  useEffect(() => {});
 
   return (
     <div className="line-container">
