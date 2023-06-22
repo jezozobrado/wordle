@@ -25,3 +25,15 @@
   align-items: center;
   font-size: 40px;
 }
+
+.green {
+  background: lightgreen;
+}
+
+.yellow {
+  background: lightyellow;
+}
+
+.gray {
+  background: lightgray;
+}
