@@ -7,16 +7,26 @@ const Tile = () => {
   const word = "stare";
 
   const [guesses, setGuesses] = useState(Array(6).fill("?????"));
+  const [row, setRow] = useState(0);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      console.log("a");
       if (LETTERS.includes(e.code)) {
         setGuesses((guesses) =>
           guesses.map((guess, i) => {
-            if (i === 0) {
+            if (i === row) {
               const realWord = guess.replaceAll("?", "");
               return realWord.length ? five(realWord + e.key) : five(e.key);
+            }
+            return guess;
+          })
+        );
+      } else if (e.code === "Backspace" || e.code === "Delete") {
+        setGuesses((guesses) =>
+          guesses.map((guess, i) => {
+            if (i === row) {
+              const realWord = guess.replaceAll("?", "");
+              return five(realWord.slice(0, -1));
             }
             return guess;
           })
@@ -25,7 +35,7 @@ const Tile = () => {
     };
     window.addEventListener("keydown", (e) => handleKeyDown(e));
 
-    // return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
