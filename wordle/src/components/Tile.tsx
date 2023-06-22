@@ -2,20 +2,21 @@ import { useCallback, useEffect, useState } from "react";
 import Line from "./Line";
 import LETTERS from "../constants/letters";
 import five from "../utils/five";
+import unFive from "../utils/unFive";
 
 const Tile = () => {
   const word = "stare";
 
-  const [guesses, setGuesses] = useState(Array(6).fill("?????"));
+  const [guesses, setGuesses] = useState<string[]>(Array(6).fill("?????"));
   const [row, setRow] = useState(0);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
       if (LETTERS.includes(e.code)) {
         setGuesses((guesses) =>
           guesses.map((guess, i) => {
-            if (i === row) {
-              const realWord = guess.replaceAll("?", "");
+            if (i === row && unFive(guess).length < 5) {
+              const realWord = unFive(guess);
               return realWord.length ? five(realWord + e.key) : five(e.key);
             }
             return guess;
@@ -25,24 +26,24 @@ const Tile = () => {
         setGuesses((guesses) =>
           guesses.map((guess, i) => {
             if (i === row) {
-              const realWord = guess.replaceAll("?", "");
+              const realWord = unFive(guess);
               return five(realWord.slice(0, -1));
             }
             return guess;
           })
         );
       }
-    };
-    window.addEventListener("keydown", (e) => handleKeyDown(e));
+    },
+    [row]
+  );
 
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  window.addEventListener("keydown", handleKeyDown);
 
   return (
     <>
       <div className="line-container">
-        {Object.values(guesses).map((guess, i) => (
-          <Line key={i} guess={guess} isBlank={true} />
+        {guesses.map((guess, i) => (
+          <Line key={i} guess={guess} />
         ))}
       </div>
     </>

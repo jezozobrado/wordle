@@ -1,11 +1,8 @@
-import five from "../utils/five";
-
 interface Props {
   guess: string;
-  isBlank: boolean;
 }
 
-const Line = ({ guess, isBlank }: Props) => {
+const Line = ({ guess }: Props) => {
   return (
     <div className="line">
       {Array.from(guess).map((letter, i) => (
