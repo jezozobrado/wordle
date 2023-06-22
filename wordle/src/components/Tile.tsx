@@ -1,43 +1,38 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Line from "./Line";
 import LETTERS from "../constants/letters";
 import five from "../utils/five";
 import unFive from "../utils/unFive";
 
 const Tile = () => {
-  const word = "stare";
-
   const [guesses, setGuesses] = useState<string[]>(Array(6).fill("?????"));
-  const [row, setRow] = useState(0);
+  const row = useRef(0);
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (LETTERS.includes(e.code)) {
-        setGuesses((guesses) =>
-          guesses.map((guess, i) => {
-            if (i === row && unFive(guess).length < 5) {
-              const realWord = unFive(guess);
-              return realWord.length ? five(realWord + e.key) : five(e.key);
-            }
-            return guess;
-          })
-        );
-      } else if (e.code === "Backspace" || e.code === "Delete") {
-        setGuesses((guesses) =>
-          guesses.map((guess, i) => {
-            if (i === row) {
-              const realWord = unFive(guess);
-              return five(realWord.slice(0, -1));
-            }
-            return guess;
-          })
-        );
-      }
-    },
-    [row]
-  );
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (LETTERS.includes(e.code)) {
+      setGuesses((guesses) =>
+        guesses.map((guess, i) => {
+          if (i === row.current && unFive(guess).length < 5)
+            return five(unFive(guess) + e.key);
+          return guess;
+        })
+      );
+    } else if (e.code === "Backspace" || e.code === "Delete") {
+      setGuesses((guesses) =>
+        guesses.map((guess, i) => {
+          if (i === row.current) return five(unFive(guess).slice(0, -1));
+          return guess;
+        })
+      );
+    } else if (e.code === "Enter") {
+      row.current = row.current + 1;
+    }
+  };
 
-  window.addEventListener("keydown", handleKeyDown);
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => handleKeyDown(e));
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <>
