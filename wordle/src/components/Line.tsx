@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Line = ({ guess, color, row, line }: Props) => {
-  console.log(row, line);
+  // console.log(line, row);
   return (
     <div className="line">
       {Array.from(guess).map((letter, i) => (
