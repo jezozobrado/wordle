@@ -9,11 +9,16 @@ const Tile = () => {
   const solution = "stare";
 
   const [guesses, setGuesses] = useState<string[]>(Array(6).fill("?????"));
+
   const [rowState, setRowState] = useState(0);
   let { current: row } = useRef(rowState);
   let { current: guessesCopy } = useRef(guesses);
-
-  const [color, setColor] = useState<string[]>(Array(5).fill(""));
+  const [colorState, setColorState] = useState<Array<Array<string>>>(
+    Array(6).fill(Array(5).fill(""))
+  );
+  let { current: colors } = useRef<Array<Array<string>>>(
+    Array(6).fill(Array(5).fill(""))
+  );
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (LETTERS.includes(e.code)) {
@@ -29,7 +34,6 @@ const Tile = () => {
           return five(unFive(guess) + e.key);
         return guess;
       });
-      // console.log("g", guessesCopy);
     } else if (e.code === "Backspace" || e.code === "Delete") {
       setGuesses((guesses) =>
         guesses.map((guess, i) => {
@@ -43,18 +47,17 @@ const Tile = () => {
         return guess;
       });
     } else if (e.code === "Enter" && unFive(guessesCopy[row]).length === 5) {
-      // console.log("r", guessesCopy[row]);
-      setColor(checkWord(guessesCopy[row], solution));
+      colors = colors.map((c, i) => {
+        if (i === row) {
+          return checkWord(guessesCopy[row], solution);
+        }
+        return c;
+      });
+      setColorState(colors);
       setRowState((prev) => prev + 1);
       row = row + 1;
-      console.log("i", row);
     }
   };
-
-  console.log("o", rowState);
-  // useEffect(() => {
-  //   console.log("o", row);
-  // }, [row]);
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => handleKeyDown(e));
@@ -65,13 +68,7 @@ const Tile = () => {
     <>
       <div className="line-container">
         {guesses.map((guess, i) => (
-          <Line
-            key={i}
-            line={i}
-            row={rowState - 1}
-            guess={guess}
-            color={color}
-          />
+          <Line key={i} line={i} guess={guess} colors={colorState} />
         ))}
       </div>
     </>

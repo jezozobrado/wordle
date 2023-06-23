@@ -1,16 +1,14 @@
 interface Props {
   guess: string;
-  color: string[];
-  row: number;
+  colors: string[][];
   line: number;
 }
 
-const Line = ({ guess, color, row, line }: Props) => {
-  // console.log(line, row);
+const Line = ({ guess, colors, line }: Props) => {
   return (
     <div className="line">
       {Array.from(guess).map((letter, i) => (
-        <div key={i} className={row === line ? `box ${color[i]}` : "box"}>
+        <div key={i} className={`box ${colors[line][i]}`}>
           {letter === "?" ? "" : letter.toUpperCase()}
         </div>
       ))}

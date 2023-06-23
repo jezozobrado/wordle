@@ -1,7 +1,6 @@
 const checkWord = (word: string, solution: string) => {
   const WORD_LENGTH = 5;
-  const color = Array(5).fill("");
-  console.log(word, solution);
+  const color = Array(5).fill("") as string[];
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (word.charAt(i) === solution.charAt(i)) {
