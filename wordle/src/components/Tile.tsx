@@ -6,7 +6,7 @@ import unFive from "../utils/unFive";
 import checkWord from "../utils/checkWord";
 
 const Tile = () => {
-  const solution = "stare";
+  const solution = "adieu";
 
   const [guesses, setGuesses] = useState<string[]>(Array(6).fill("?????"));
 

@@ -5,18 +5,20 @@ const checkWord = (word: string, solution: string) => {
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (word.charAt(i) === solution.charAt(i)) {
       color[i] = "green";
-      word = word.replace(word.charAt(i), "?");
+      word = word.slice(0, i) + "?" + word.slice(i + 1);
+      solution = solution.slice(0, i) + "?" + solution.slice(i + 1);
     }
   }
-
+  console.log(word);
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (word.charAt(i) === "?") continue;
     if (solution.includes(word.charAt(i))) {
       color[i] = "yellow";
-      word = word.replace(word.charAt(i), "?");
+      word = word.slice(0, i) + "?" + word.slice(i + 1);
+      solution = solution.replace(word.charAt(i), "?");
     } else {
       color[i] = "gray";
-      word = word.replace(word.charAt(i), "?");
+      word = word.slice(0, i) + "?" + word.slice(i + 1);
     }
   }
 
