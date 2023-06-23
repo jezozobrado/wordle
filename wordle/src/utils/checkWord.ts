@@ -16,8 +16,10 @@ const checkWord = (word: string, solution: string) => {
     if (word.charAt(i) === "?") continue;
     if (solution.includes(word.charAt(i))) {
       color[i] = "yellow";
-      word = hideCheckedLetters(word, i);
       solution = solution.replace(word.charAt(i), "?");
+      word = hideCheckedLetters(word, i);
+
+      console.log(word, solution);
     } else {
       color[i] = "gray";
       word = hideCheckedLetters(word, i);

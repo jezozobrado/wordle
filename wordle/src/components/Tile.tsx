@@ -20,6 +20,8 @@ const Tile = () => {
     Array(6).fill(Array(5).fill(""))
   );
 
+  const [isSolved, setIsSolved] = useState(false);
+
   const handleKeyDown = (e: KeyboardEvent) => {
     if (LETTERS.includes(e.code)) {
       setGuesses((guesses) =>
