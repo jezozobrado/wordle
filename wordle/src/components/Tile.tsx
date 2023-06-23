@@ -20,9 +20,11 @@ const Tile = () => {
     Array(6).fill(Array(5).fill(""))
   );
 
-  const [isSolved, setIsSolved] = useState(false);
+  let { current: isSolved } = useRef(false);
+  const [solved, setSolved] = useState(false);
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    if (isSolved) return;
     if (LETTERS.includes(e.code)) {
       setGuesses((guesses) =>
         guesses.map((guess, i) => {
@@ -49,6 +51,10 @@ const Tile = () => {
         return guess;
       });
     } else if (e.code === "Enter" && unFive(guessesCopy[row]).length === 5) {
+      if (guessesCopy[row] === solution) {
+        isSolved = true;
+        setSolved(true);
+      }
       colors = colors.map((c, i) => {
         if (i === row) {
           return checkWord(guessesCopy[row], solution);
@@ -63,11 +69,12 @@ const Tile = () => {
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => handleKeyDown(e));
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", (e) => handleKeyDown(e));
   }, []);
 
   return (
     <>
+      {solved && <p>Congratulations!</p>}
       <div className="line-container">
         {guesses.map((guess, i) => (
           <Line key={i} line={i} guess={guess} colors={colorState} />
