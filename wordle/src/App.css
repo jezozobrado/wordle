@@ -5,6 +5,12 @@
   align-items: center;
 }
 
+.board-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .line-container {
   display: flex;
   flex-direction: column;
@@ -24,6 +30,15 @@
   justify-content: center;
   align-items: center;
   font-size: 40px;
+}
+
+.btn {
+  border: solid 1px black;
+}
+
+.btn:hover {
+  background-color: lightgray;
+  border: solid 1px black;
 }
 
 .green {

@@ -23,8 +23,9 @@ const Tile = () => {
   let { current: isSolved } = useRef(false);
   const [solved, setSolved] = useState(false);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (isSolved) return;
+  const handleKeyDown = (e: KeyboardEvent, solved: boolean) => {
+    console.log(solved);
+    if (solved) return;
     if (LETTERS.includes(e.code)) {
       setGuesses((guesses) =>
         guesses.map((guess, i) => {
@@ -68,17 +69,39 @@ const Tile = () => {
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", (e) => handleKeyDown(e));
-    return () => window.removeEventListener("keydown", (e) => handleKeyDown(e));
+    window.addEventListener("keydown", (e) => handleKeyDown(e, solved));
+    return () =>
+      window.removeEventListener("keydown", (e) => handleKeyDown(e, solved));
   }, []);
+
+  const handleRestart = () => {
+    row = 0;
+    guessesCopy = Array(6).fill("?????");
+    colors = Array(6).fill(Array(5).fill(""));
+    isSolved = !false;
+    setSolved(false);
+    setGuesses(Array(6).fill("?????"));
+    setRowState(0);
+    setColorState(Array(6).fill(Array(5).fill("")));
+    console.log("x", isSolved, solved);
+  };
+
+  // console.log("xxx", isSolved);
 
   return (
     <>
       {solved && <p>Congratulations!</p>}
-      <div className="line-container">
-        {guesses.map((guess, i) => (
-          <Line key={i} line={i} guess={guess} colors={colorState} />
-        ))}
+      <div className="board-container">
+        <div className="line-container">
+          {guesses.map((guess, i) => (
+            <Line key={i} line={i} guess={guess} colors={colorState} />
+          ))}
+        </div>
+        {solved && (
+          <button className="btn" onClick={handleRestart}>
+            Play again.
+          </button>
+        )}
       </div>
     </>
   );
